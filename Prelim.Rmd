@@ -1,4 +1,5 @@
 ---
+
 title: "Preliminary Data Wrangling and Visualization"
 author: "Phuc Nguyen"
 date: "December 30, 2016"
@@ -23,6 +24,7 @@ FMLI161$QYEAR <- rep(20161, nrow(FMLI161))
 FMLI161$BIRTHYR <- NULL
 FMLI161$REFGEN <- NULL
 names(FMLI151) <- names(FMLI152)
+
 CONSUMER_UNIT <- do.call(rbind, list(FMLI151,FMLI152,FMLI153, FMLI154, FMLI161))
 MEDEXPN <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\mdb15.csv")
 FOODEXPN <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\xpa15.csv")
