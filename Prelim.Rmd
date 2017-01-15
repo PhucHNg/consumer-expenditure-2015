@@ -1,0 +1,46 @@
+---
+title: "Preliminary Data Wrangling and Visulization"
+author: "Phuc Nguyen"
+date: "December 30, 2016"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+FMLI151 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\intrvw15\\fmli151x.csv")
+FMLI151$QYEAR <- rep(20151, nrow(FMLI151))
+FMLI152 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\intrvw15\\fmli152.csv")
+FMLI152$QYEAR <- rep(20152, nrow(FMLI152))
+FMLI153 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\intrvw15\\fmli153.csv")
+FMLI153$QYEAR <- rep(20153, nrow(FMLI153))
+FMLI154 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\intrvw15\\fmli154.csv")
+FMLI154$QYEAR <- rep(20154, nrow(FMLI154))
+FMLI161 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\intrvw15\\fmli161.csv")
+FMLI161$QYEAR <- rep(20161, nrow(FMLI161))
+FMLI161$BIRTHYR <- NULL
+FMLI161$REFGEN <- NULL
+names(FMLI151) <- names(FMLI152)
+FMLI15 <- do.call(rbind, list(FMLI151,FMLI152,FMLI153, FMLI154, FMLI161))
+MBD15 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\mdb15.csv")
+XPA15 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\xpa15.csv")
+save(FMLI15,file="UC.RData")
+save(MBD15, file = "MEDEXPN.RData")
+save(XPA15, file = "FOODEXPN.RData")
+```
+
+```{r}
+load("UC.RData")
+load("MEDEXPN.RData")
+load("FOODEXPN.RData")
+```
+
+```{r}
+EXPENSE <- inner_join(FMLI15, MBD15, by=c("NEWID","QYEAR"))
+save(EXPENSE, file = "EXPENSE.RData")
+
+EXPENSE_W_FOOD <- inner_join(EXPENSE, XPA15, by=c("NEWID","QYEAR"))
+save(EXPENSE_W_FOOD, file = "EXPENSE_W_FOOD.RData")
+```
