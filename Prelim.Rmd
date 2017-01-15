@@ -1,5 +1,6 @@
 ---
-title: "Preliminary Data Wrangling and Visulization"
+
+title: "Preliminary Data Wrangling and Visualization"
 author: "Phuc Nguyen"
 date: "December 30, 2016"
 output: html_document
@@ -23,12 +24,13 @@ FMLI161$QYEAR <- rep(20161, nrow(FMLI161))
 FMLI161$BIRTHYR <- NULL
 FMLI161$REFGEN <- NULL
 names(FMLI151) <- names(FMLI152)
-FMLI15 <- do.call(rbind, list(FMLI151,FMLI152,FMLI153, FMLI154, FMLI161))
-MBD15 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\mdb15.csv")
-XPA15 <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\xpa15.csv")
-save(FMLI15,file="UC.RData")
-save(MBD15, file = "MEDEXPN.RData")
-save(XPA15, file = "FOODEXPN.RData")
+
+CONSUMER_UNIT <- do.call(rbind, list(FMLI151,FMLI152,FMLI153, FMLI154, FMLI161))
+MEDEXPN <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\mdb15.csv")
+FOODEXPN <- read.csv("C:\\Users\\Phuc\\Documents\\MACALESTER\\JUNIOR\\Data Challenge\\expn15\\xpa15.csv")
+save(CONSUMER_UNIT,file="UC.RData")
+save(MEDEXPN, file = "MEDEXPN.RData")
+save(FOODEXPN, file = "FOODEXPN.RData")
 ```
 
 ```{r}
@@ -38,9 +40,7 @@ load("FOODEXPN.RData")
 ```
 
 ```{r}
-EXPENSE <- inner_join(FMLI15, MBD15, by=c("NEWID","QYEAR"))
+tempt <- inner_join(CONSUMER_UNIT, MEDEXPN, by=c("NEWID","QYEAR"))
+EXPENSE <- inner_join(tempt, FOODEXPN, by=c("NEWID","QYEAR"))
 save(EXPENSE, file = "EXPENSE.RData")
-
-EXPENSE_W_FOOD <- inner_join(EXPENSE, XPA15, by=c("NEWID","QYEAR"))
-save(EXPENSE_W_FOOD, file = "EXPENSE_W_FOOD.RData")
 ```
