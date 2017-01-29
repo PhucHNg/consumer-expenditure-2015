@@ -1,0 +1,62 @@
+---
+title: "Factors affecting spendings on health"
+author: "Phuc Nguyen"
+date: "January 15, 2017"
+output: html_document
+---
+
+We can use tree to find indicators of changes in health care expenditure. Some variables might be of interest:
+
+- MEDPCARY: categories of med spendings
+- MEDPMTMO: one time or monthly expense
+- MEDPMTX: amount of expense
+- JMKGRCQV: quarterly expense for groceries/food
+- JALOUTQV: alcohol from restaurants
+- JDINEOQV: dine out
+- JOTHSTQV: groceries not from store (eg: farmer market)
+
+
+```{r}
+library(rpart)
+library(glmnet)
+```
+
+```{r}
+load("EXPENSE.RData")
+```
+
+```{r}
+# regtree <- rpart(MEDPMTX ~ ., data=EXPENSE, method = "anova", control=rpart.control(minsplit = 30, cp=0.001))
+# pruned_tree <- prune(regtree, cp=0.01)
+# printcp(pruned_tree)
+# plot(pruned_tree)
+# text(pruned_tree)
+```
+
+I don't know... Tree doesn't seem to work :/
+
+```{r}
+library(glmnet)
+load("EXPENSE2.RData")
+
+#Clean data:
+EXPENSE2[EXPENSE2 == "A" | EXPENSE2 == "B" | EXPENSE2 == "C" | EXPENSE2 == "D" | EXPENSE2 == "E" | EXPENSE2 == "F" | EXPENSE2 == "G" | EXPENSE2 == "H" | EXPENSE2 == "T" | EXPENSE2 == "U" | EXPENSE2 == "V" | EXPENSE2 == "W"] <- NA
+
+#EXPENSE2[EXPENSE2 %in% c("A","B","C","D","E","F","G","H","T","U","V","W")] <- NA
+EXPENSE2 = EXPENSE2[ , colSums(is.na(EXPENSE2)) != nrow(EXPENSE2)]
+
+
+#Response variable:
+
+Y <-as.numeric(EXPENSE2$QHI3MCX)
+X <-as.matrix(select(EXPENSE2,-QHI3MCX))
+lasso_mod <- cv.glmnet(X,Y,alpha=1)
+
+```
+
+Let's try lasso to find some important variables instead:
+```{r}
+# Y <- EXPENSE$MEDPMTX
+# X <- as.matrix(select(EXPENSE, -MEDPMTX))
+# lasso_mod <- cv.glmnet(X, Y, alpha=1)
+```
